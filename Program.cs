@@ -23,16 +23,7 @@
             string defaultPath = "..\\..\\..\\dict\\";
             string defaultFile = "sweeng.lis";
             Console.WriteLine("Welcome to the dictionary app!");
-            //TBD: Refactor into method:
-            Console.WriteLine("\n Available commands:\n" +
-                        "  new /swe/ /eng/       - Add new word to dictionary. /swe/ and /eng/ optional.\n" +
-                        "  load                  - Load dictionary from default file.\n" +
-                        "  load /filename/       - Load dictionary from /filename/." +
-                        "  list                  - Display dictionary.\n" +
-                        "  delete /swe/ /eng/    - Delete word from dictionary.\n" +
-                        "  translate /word/      - Translate /word/ from Swedish to English or from English to Swedish.\n" +
-                        "  help                  - Show this list of available commands.\n" +
-                        "  quit                  - Exit application.");
+            ShowHelp();
             do
             {
                 string[] argument = GetArgs("> ");
@@ -44,10 +35,8 @@
                 }
                 else if (command == "load")
                 {
-                    if (argument.Length <= 2)
-                        LoadDictionary(defaultPath, argument[1]);
-                    else if (argument.Length == 1)
-                        LoadDictionary(defaultPath, defaultFile);
+                    if (argument.Length == 2) LoadDictionary(defaultPath, argument[1]);
+                    else if (argument.Length == 1) LoadDictionary(defaultPath, defaultFile);
                 }
                 else if (command == "list")
                 {
@@ -62,94 +51,19 @@
                 }
                 else if (command == "delete")
                 {
-                    //TBD: Refactor two repeating instances of code.
                     if (argument.Length == 3)
-                    {
-                        bool found = false;
-                        for (int i = 0; i < dictionary.Count; i++)
-                        {
-                            SweEngGloss gloss = dictionary[i];
-                            if (gloss.word_swe == argument[1] && gloss.word_eng == argument[2])
-                            {
-                                Console.WriteLine(" '{0} - {1}' successfully removed.", gloss.word_swe, gloss.word_eng);
-                                dictionary.RemoveAt(i);
-                                found = true;
-                                break;
-                            }
-                        }
-                        if (!found) Console.WriteLine(" Could not find any word '{0} - {1}' to delete.", argument[1], argument[2]);
-                    }
+                        DeleteWord(argument[1], argument[2]);
                     else if (argument.Length == 1)
-                    {
-                        bool found = false;
-                        string swe_meaning = GetString("Write word in Swedish: ");
-                        string eng_meaning = GetString("Write word in English: ");
-                        for (int i = 0; i < dictionary.Count; i++)
-                        {
-                            SweEngGloss gloss = dictionary[i];
-                            if (gloss.word_swe == swe_meaning && gloss.word_eng == eng_meaning)
-                            {
-                                Console.WriteLine(" '{0} - {1}' successfully removed.", gloss.word_swe, gloss.word_eng);
-                                dictionary.RemoveAt(i);
-                                found = true;
-                                break;
-                            }
-                        }
-                        if (!found) Console.WriteLine(" Could not find any word '{0} - {1}' to delete.", swe_meaning, eng_meaning);
-                    }
+                        DeleteWord(GetString("Write word in Swedish: "), GetString("Write word in English: "));
                 }
                 else if (command == "translate")
                 {
-                    //TBD: Refactor repeating code.
-                    if (argument.Length == 2)
-                    {
-                        bool found = false;
-                        foreach (SweEngGloss gloss in dictionary)
-                        {
-                            if (gloss.word_swe == argument[1])
-                            {
-                                Console.WriteLine($"English for {gloss.word_swe} is {gloss.word_eng}");
-                                found = true;
-                            }
-                            if (gloss.word_eng == argument[1])
-                            {
-                                Console.WriteLine($"Swedish for {gloss.word_eng} is {gloss.word_swe}");
-                                found = true;
-                            }
-                        }
-                        if (!found) Console.WriteLine(" '{0}' not found in dictionary!", argument[1]);
-                    }
-                    else if (argument.Length == 1)
-                    {
-                        bool found = false;
-                        string word_to_translate = GetString("Write word to be translated: ");
-                        foreach (SweEngGloss gloss in dictionary)
-                        {
-                            if (gloss.word_swe == word_to_translate)
-                            {
-                                Console.WriteLine($"English for {gloss.word_swe} is {gloss.word_eng}");
-                                found = true;
-                            }
-                            if (gloss.word_eng == word_to_translate)
-                            {
-                                Console.WriteLine($"Swedish for {gloss.word_eng} is {gloss.word_swe}");
-                                found = true;
-                            }
-                        }
-                        if (!found) Console.WriteLine(" '{0}' not found in dictionary!", word_to_translate);
-                    }
+                    if (argument.Length == 2) Console.WriteLine(TranslateWord(argument[1]));
+                    else if (argument.Length == 1) Console.WriteLine(TranslateWord(GetString("Write word to be translated: ")));
                 }
                 else if (command == "help")
                 {
-                    Console.WriteLine("\n Available commands:\n" +
-                        "  new /swe/ /eng/       - Add new word to dictionary. /swe/ and /eng/ optional.\n" +
-                        "  load                  - Load dictionary from default file.\n" +
-                        "  load /filename/       - Load dictionary from /filename/." +
-                        "  list                  - Display dictionary.\n" +
-                        "  delete /swe/ /eng/    - Delete word from dictionary.\n" +
-                        "  translate /word/      - Translate /word/ from Swedish to English or from English to Swedish.\n" +
-                        "  help                  - Show this list of available commands.\n" +
-                        "  quit                  - Exit application.");
+                    ShowHelp();
                 }
                 else
                 {
@@ -157,6 +71,46 @@
                 }
             }
             while (true);
+        }
+
+        private static void ShowHelp()
+        {
+            Console.WriteLine("\n Available commands:\n" +
+                                    "  new /swe/ /eng/       - Add new word to dictionary. /swe/ and /eng/ optional.\n" +
+                                    "  load                  - Load dictionary from default file.\n" +
+                                    "  load /filename/       - Load dictionary from /filename/." +
+                                    "  list                  - Display dictionary.\n" +
+                                    "  delete /swe/ /eng/    - Delete word from dictionary.\n" +
+                                    "  translate /word/      - Translate /word/ from Swedish to English or from English to Swedish.\n" +
+                                    "  help                  - Show this list of available commands.\n" +
+                                    "  quit                  - Exit application.");
+        }
+
+        private static string TranslateWord(string word_to_translate)
+        {
+            foreach (SweEngGloss gloss in dictionary)
+            {
+                if (gloss.word_swe == word_to_translate) return $"English for {gloss.word_swe} is {gloss.word_eng}";
+                if (gloss.word_eng == word_to_translate) return $"Swedish for {gloss.word_eng} is {gloss.word_swe}";
+            }
+            return $" '{word_to_translate}' not found in dictionary!";
+        }
+
+        private static void DeleteWord(string word_swe, string word_eng)
+        {
+            bool found = false;
+            for (int i = 0; i < dictionary.Count; i++)
+            {
+                SweEngGloss gloss = dictionary[i];
+                if (gloss.word_swe == word_swe && gloss.word_eng == word_eng)
+                {
+                    Console.WriteLine(" '{0} - {1}' successfully removed.", gloss.word_swe, gloss.word_eng);
+                    dictionary.RemoveAt(i);
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) Console.WriteLine(" Could not find any word '{0} - {1}' to delete.", word_swe, word_eng);
         }
 
         private static void AddWord(string word_swe, string word_eng)
