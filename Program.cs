@@ -1,8 +1,22 @@
 ﻿namespace MJU23v_D10_inl_sveng
 {
+    /// <summary>
+    /// ********************************************
+    /// MJU23v_D10_inl_sveng
+    /// Inlämningsuppgift för kursen "Datalogiskt tänkande och problemlösning" vid programmet Mjukvaruutvecklare vid MÖLK
+    /// ********************************************
+    /// Av: Sebastian Senic
+    /// Datum: 2023-03-10
+    /// </summary>
     internal class Program
     {
+        /// <summary>
+        /// List <c>dictionary</c> is a list of SweEngGloss the application uses for rw
+        /// </summary>
         static List<SweEngGloss> dictionary = new();
+        /// <summary>
+        /// Class <c>SweEngGloss</c> models a word and contains the word in Swedish and the word in English
+        /// </summary>
         class SweEngGloss
         {
             public string word_swe { get; private set; }
@@ -19,7 +33,7 @@
         }   
         static void Main(string[] args)
         {
-            //FIXME: path is customized for navigating VS project directories. Change before publishing.
+            //TODO: path is customized for navigating VS project directories. Change before publishing.
             string defaultPath = "..\\..\\..\\dict\\";
             string defaultFile = "sweeng.lis";
             Console.WriteLine("Welcome to the dictionary app!");
@@ -72,7 +86,9 @@
             }
             while (true);
         }
-
+        /// <summary>
+        /// Method <c>static void ShowHelp()</c> writes available commands to termingal.
+        /// </summary>
         private static void ShowHelp()
         {
             Console.WriteLine("\n Available commands:\n" +
@@ -85,7 +101,11 @@
                                     "  help                  - Show this list of available commands.\n" +
                                     "  quit                  - Exit application.");
         }
-
+        /// <summary>
+        /// Method <c>static string TranslateWord(string word_to_translate)</c> searches in the dictionary List for word_to_translate and translates it.
+        /// </summary>
+        /// <param name="word_to_translate"></param>
+        /// <returns>"word_to_translate" translated to the other language or an error message if no match was found</returns>
         private static string TranslateWord(string word_to_translate)
         {
             foreach (SweEngGloss gloss in dictionary)
@@ -95,30 +115,40 @@
             }
             return $" '{word_to_translate}' not found in dictionary!";
         }
-
+        /// <summary>
+        /// Method <c>static void DeleteWord(string word_swe, string word_eng)</c> searches the dictionary List for an entry that matches both Swedish and English words and deletes the entry. Prints a message to console if no match is found.
+        /// </summary>
+        /// <param name="word_swe"></param>
+        /// <param name="word_eng"></param>
         private static void DeleteWord(string word_swe, string word_eng)
         {
-            bool found = false;
+            int index = -1;
             for (int i = 0; i < dictionary.Count; i++)
             {
                 SweEngGloss gloss = dictionary[i];
                 if (gloss.word_swe == word_swe && gloss.word_eng == word_eng)
                 {
                     Console.WriteLine(" '{0} - {1}' successfully removed.", gloss.word_swe, gloss.word_eng);
-                    dictionary.RemoveAt(i);
-                    found = true;
+                    index = i;
                     break;
                 }
             }
-            if (!found) Console.WriteLine(" Could not find any word '{0} - {1}' to delete.", word_swe, word_eng);
+            try { dictionary.RemoveAt(index); }
+            catch (ArgumentOutOfRangeException) { Console.WriteLine(" Could not find any word '{0} - {1}' to delete.", word_swe, word_eng); }
         }
-
+        /// <summary>
+        /// Method <c>static void AddWord(string word_swe, string word_eng)</c> Adds a word to the dictionary List.
+        /// </summary>
+        /// <param name="word_swe"></param>
+        /// <param name="word_eng"></param>
         private static void AddWord(string word_swe, string word_eng)
         {
             dictionary.Add(new SweEngGloss(word_swe, word_eng));
             Console.WriteLine(" Added word to dictionary: '{0} - {1}'\n", word_swe, word_eng);
         }
-
+        /// <summary>
+        /// Method <c>static void ShowDictionary()</c> Prints all elements of the dictionary list to console.
+        /// </summary>
         private static void ShowDictionary()
         {
             if (!dictionary.Any()) Console.WriteLine(" There are no words in the dictionary!");
@@ -126,7 +156,11 @@
                 foreach (SweEngGloss gloss in dictionary)
                     Console.WriteLine($"{gloss.word_swe,-10}  - {gloss.word_eng,-10}");
         }
-
+        /// <summary>
+        /// Method <c>static void LoadDictionary(string path, string file)</c> clears current dictionary and loads elements from a file.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="file"></param>
         private static void LoadDictionary(string path, string file)
         {
             try
@@ -153,12 +187,21 @@
                 Console.WriteLine("Error: Loading aborted. File is corrupt or is not a valid .lis dictionary file.");
             }
         }
-
+        /// <summary>
+        /// Method <c>static string[] GetArgs(string prompt)</c> Prompts the user for input and returns it as multiple strings.
+        /// </summary>
+        /// <param name="prompt"></param>
+        /// <returns>string[] of user input split by whitespaces</returns>
         private static string[] GetArgs(string prompt)
         {
             Console.Write(prompt);
             return Console.ReadLine().Split();
         }
+        /// <summary>
+        /// Method <c>static string GetString(string prompt)</c> prompts the user for input and returns it as a string.
+        /// </summary>
+        /// <param name="prompt"></param>
+        /// <returns>string of user input</returns>
         private static string GetString(string prompt)
         {
             Console.Write(prompt);
