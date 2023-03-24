@@ -20,8 +20,8 @@
         static void Main(string[] args)
         {
             //FIXME: defaultPath is customized for navigating VS project directories. Change before publishing.
-            //FIXME: Split into two variables, path and file in order to enable user input of relative path filenames.
-            string defaultFile = "..\\..\\..\\dict\\sweeng.lis";
+            string defaultPath = "..\\..\\..\\dict\\";
+            string defaultFile = defaultPath + "sweeng.lis";
             Console.WriteLine("Welcome to the dictionary app!");
             //TBD: Refactor into method:
             Console.WriteLine("\n Available commands:\n" +
@@ -35,7 +35,6 @@
                         "  quit                  - Exit application.");
             do
             {
-                //NYI: Execute help method displaying all commands.
                 //TBD: Refactor following two lines to one method 'string[] str_arr = GetStringArray(string prompt)'
                 Console.Write("> ");
                 string[] argument = Console.ReadLine().Split();
@@ -51,9 +50,9 @@
                     //TBD: Add console feedback confirming loaded file or file not found.
                     if(argument.Length == 2)
                     {
-                        //FIXME: Crashes on incorrect filename FileNotFoundException
-                        //FIXME: Check file formatting before emptying list and trying to load.
-                        using (StreamReader sr = new StreamReader(argument[1]))
+                        //NYI: Crashes on incorrect filename FileNotFoundException
+                        //NYI: Check file formatting before emptying list and trying to load.
+                        using (StreamReader sr = new StreamReader(defaultPath + argument[1]))
                         {
                             dictionary = new List<SweEngGloss>(); // Empty it!
                             string line = sr.ReadLine();
@@ -106,7 +105,7 @@
                 }
                 else if (command == "delete")
                 {
-                    //FIXME: Exception: ArgumentOutOfRange when word is not found
+                    //NYI: Exception: ArgumentOutOfRange when word is not found
                     //TBD: Refactor two repeating instances of code.
                     //TBD: Add user feedback in console on successful deletion and word not found
                     if (argument.Length == 3)
@@ -178,7 +177,6 @@
                 {
                     Console.WriteLine($"Unknown command: '{command}'");
                 }
-                //NYI: Add help command to display available commands and show it at startup.
             }
             while (true);
         }
