@@ -129,20 +129,28 @@
 
         private static void LoadDictionary(string path, string file)
         {
-            //NYI: Crashes on incorrect filename FileNotFoundException. Add user feedback instead.
-            //NYI: Check file formatting before emptying list and trying to load.
-            using (StreamReader reader = new StreamReader(path + file))
+            try
             {
-                dictionary = new List<SweEngGloss>(); // Empty it!
-                string line = reader.ReadLine();
-                while (line != null)
+
+                //NYI: Crashes on incorrect filename FileNotFoundException. Add user feedback instead.
+                //NYI: Check file formatting before emptying list and trying to load.
+                using (StreamReader reader = new StreamReader(path + file))
                 {
-                    SweEngGloss gloss = new SweEngGloss(line);
-                    dictionary.Add(gloss);
-                    line = reader.ReadLine();
+                    dictionary = new List<SweEngGloss>(); // Empty it!
+                    string line = reader.ReadLine();
+                    while (line != null)
+                    {
+                        SweEngGloss gloss = new SweEngGloss(line);
+                        dictionary.Add(gloss);
+                        line = reader.ReadLine();
+                    }
                 }
+                Console.WriteLine("\n " + file[1] + " succesfully loaded!\n");
             }
-            Console.WriteLine("\n " + file[1] + " succesfully loaded!\n");
+            catch(FileNotFoundException e)
+            {
+                Console.WriteLine("Error: " + e.Message);
+            }
         }
 
         private static string[] GetArgs(string prompt)
