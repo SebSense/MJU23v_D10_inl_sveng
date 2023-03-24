@@ -35,7 +35,6 @@
                         "  quit                  - Exit application.");
             do
             {
-                //TBD: Refactor following two lines to one method 'string[] str_arr = GetStringArray(string prompt)'
                 string[] argument = GetArgs("> ");
                 string command = argument[0];
                 if (command == "quit")
@@ -46,7 +45,7 @@
                 else if (command == "load")
                 {
                     //TBD: Refactor repeating code
-                    //TBD: Add console feedback confirming loaded file or file not found.
+                    //TBD: Add console feedback for file not found.
                     if (argument.Length == 2)
                     {
                         //NYI: Crashes on incorrect filename FileNotFoundException
@@ -82,10 +81,10 @@
                 }
                 else if (command == "list")
                 {
-                    foreach (SweEngGloss gloss in dictionary)
-                    {
-                        Console.WriteLine($"{gloss.word_swe,-10}  - {gloss.word_eng,-10}");
-                    }
+                    if (!dictionary.Any()) Console.WriteLine(" There are no words in the dictionary!");
+                    else
+                        foreach (SweEngGloss gloss in dictionary)
+                           Console.WriteLine($"{gloss.word_swe,-10}  - {gloss.word_eng,-10}");
                 }
                 else if (command == "new")
                 {
@@ -96,7 +95,6 @@
                     }
                     else if (argument.Length == 1)
                     {
-                        //TBD: Refactor two lines into one method.
                         string swe_meaning = GetString("Write word in Swedish: ");
                         string eng_meaning = GetString("Write word in English: ");
                         dictionary.Add(new SweEngGloss(swe_meaning, eng_meaning));
@@ -125,7 +123,6 @@
                     else if (argument.Length == 1)
                     {
                         bool found = false;
-                        //TBD: Refactor two lines into one method.
                         string swe_meaning = GetString("Write word in Swedish: ");
                         string eng_meaning = GetString("Write word in English: ");
                         for (int i = 0; i < dictionary.Count; i++)
@@ -144,28 +141,43 @@
                 }
                 else if (command == "translate")
                 {
-                    //NYI: Add user feecback for word not found
                     //TBD: Refactor repeating code.
                     if (argument.Length == 2)
                     {
+                        bool found = false;
                         foreach (SweEngGloss gloss in dictionary)
                         {
                             if (gloss.word_swe == argument[1])
+                            {
                                 Console.WriteLine($"English for {gloss.word_swe} is {gloss.word_eng}");
+                                found = true;
+                            }
                             if (gloss.word_eng == argument[1])
+                            {
                                 Console.WriteLine($"Swedish for {gloss.word_eng} is {gloss.word_swe}");
+                                found = true;
+                            }
                         }
+                        if (!found) Console.WriteLine(" '{0}' not found in dictionary!", argument[1]);
                     }
                     else if (argument.Length == 1)
                     {
+                        bool found = false;
                         string word_to_translate = GetString("Write word to be translated: ");
                         foreach (SweEngGloss gloss in dictionary)
                         {
                             if (gloss.word_swe == word_to_translate)
+                            {
                                 Console.WriteLine($"English for {gloss.word_swe} is {gloss.word_eng}");
+                                found = true;
+                            }
                             if (gloss.word_eng == word_to_translate)
+                            {
                                 Console.WriteLine($"Swedish for {gloss.word_eng} is {gloss.word_swe}");
+                                found = true;
+                            }
                         }
+                        if (!found) Console.WriteLine(" '{0}' not found in dictionary!", word_to_translate);
                     }
                 }
                 else if (command == "help")
