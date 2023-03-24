@@ -90,7 +90,6 @@
                 }
                 else if (command == "new")
                 {
-                    //TBD: Add user feedback on new word added
                     if (argument.Length == 3)
                     {
                         dictionary.Add(new SweEngGloss(argument[1], argument[2]));
@@ -109,18 +108,18 @@
                 }
                 else if (command == "delete")
                 {
-                    //NYI: Exception: ArgumentOutOfRange when word is not found
                     //TBD: Refactor two repeating instances of code.
-                    //TBD: Add user feedback in console on successful deletion and word not found
                     if (argument.Length == 3)
                     {
-                        int index = -1;
                         for (int i = 0; i < dictionary.Count; i++) {
                             SweEngGloss gloss = dictionary[i];
                             if (gloss.word_swe == argument[1] && gloss.word_eng == argument[2])
-                                index = i;
+                            {
+                                Console.WriteLine(" Word '{0} - {1}' successfully removed.\n", gloss.word_swe, gloss.word_eng);
+                                dictionary.RemoveAt(i);
+                                break;
+                            }
                         }
-                        dictionary.RemoveAt(index);
                     }
                     else if (argument.Length == 1)
                     {
@@ -129,14 +128,16 @@
                         string s = Console.ReadLine();
                         Console.Write("Write word in English: ");
                         string e = Console.ReadLine();
-                        int index = -1;
                         for (int i = 0; i < dictionary.Count; i++)
                         {
                             SweEngGloss gloss = dictionary[i];
                             if (gloss.word_swe == s && gloss.word_eng == e)
-                                index = i;
+                            {
+                                Console.WriteLine(" Word '{0} - {1}' successfully removed.\n", gloss.word_swe, gloss.word_eng);
+                                dictionary.RemoveAt(i);
+                                break;
+                            }
                         }
-                        dictionary.RemoveAt(index);
                     }
                 }
                 else if (command == "translate")
