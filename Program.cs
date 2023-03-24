@@ -131,9 +131,6 @@
         {
             try
             {
-
-                //NYI: Crashes on incorrect filename FileNotFoundException. Add user feedback instead.
-                //NYI: Check file formatting before emptying list and trying to load.
                 using (StreamReader reader = new StreamReader(path + file))
                 {
                     dictionary = new List<SweEngGloss>(); // Empty it!
@@ -145,11 +142,15 @@
                         line = reader.ReadLine();
                     }
                 }
-                Console.WriteLine("\n " + file[1] + " succesfully loaded!\n");
+                Console.WriteLine("\n " + file + " succesfully loaded!\n");
             }
             catch(FileNotFoundException e)
             {
                 Console.WriteLine("Error: " + e.Message);
+            }
+            catch(IndexOutOfRangeException e)
+            {
+                Console.WriteLine("Error: Loading aborted. File is corrupt or is not a valid .lis dictionary file.");
             }
         }
 
