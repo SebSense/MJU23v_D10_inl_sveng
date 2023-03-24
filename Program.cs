@@ -2,9 +2,10 @@
 {
     internal class Program
     {
-        static List<SweEngGloss> dictionary;
+        static List<SweEngGloss> dictionary = new();
         class SweEngGloss
         {
+            //TODO: Make private.
             public string word_swe, word_eng;
             public SweEngGloss(string word_swe, string word_eng)
             {
@@ -15,24 +16,33 @@
                 string[] words = line.Split('|');
                 this.word_swe = words[0]; this.word_eng = words[1];
             }
-        }
+        }   
         static void Main(string[] args)
         {
+            //FIXME: defaultPath is customized for navigating VS project directories. Change before publishing.
+            //FIXME: Split into two variables, path and file in order to enable user input of relative path filenames.
             string defaultFile = "..\\..\\..\\dict\\sweeng.lis";
             Console.WriteLine("Welcome to the dictionary app!");
             do
             {
+                //NYI: Execute help method displaying all commands.
+                //TBD: Refactor following two lines to one method 'string[] str_arr = GetStringArray(string prompt)'
                 Console.Write("> ");
                 string[] argument = Console.ReadLine().Split();
                 string command = argument[0];
                 if (command == "quit")
                 {
                     Console.WriteLine("Goodbye!");
+                    return;
                 }
                 else if (command == "load")
                 {
+                    //TBD: Refactor repeating code
+                    //TBD: Add console feedback confirming loaded file or file not found.
                     if(argument.Length == 2)
                     {
+                        //FIXME: Crashes on incorrect filename FileNotFoundException
+                        //FIXME: Check file formatting before emptying list and trying to load.
                         using (StreamReader sr = new StreamReader(argument[1]))
                         {
                             dictionary = new List<SweEngGloss>(); // Empty it!
@@ -69,12 +79,14 @@
                 }
                 else if (command == "new")
                 {
+                    //TBD: Add user feedback on new word added
                     if (argument.Length == 3)
                     {
                         dictionary.Add(new SweEngGloss(argument[1], argument[2]));
                     }
                     else if(argument.Length == 1)
                     {
+                        //TBD: Refactor two lines into one method.
                         Console.WriteLine("Write word in Swedish: ");
                         string s = Console.ReadLine();
                         Console.Write("Write word in English: ");
@@ -84,6 +96,9 @@
                 }
                 else if (command == "delete")
                 {
+                    //FIXME: Exception: ArgumentOutOfRange when word is not found
+                    //TBD: Refactor two repeating instances of code.
+                    //TBD: Add user feedback in console on successful deletion and word not found
                     if (argument.Length == 3)
                     {
                         int index = -1;
@@ -96,6 +111,7 @@
                     }
                     else if (argument.Length == 1)
                     {
+                        //TBD: Refactor two lines into one method.
                         Console.WriteLine("Write word in Swedish: ");
                         string s = Console.ReadLine();
                         Console.Write("Write word in English: ");
@@ -112,6 +128,7 @@
                 }
                 else if (command == "translate")
                 {
+                    //TBD: Refactor repeating code.
                     if (argument.Length == 2)
                     {
                         foreach(SweEngGloss gloss in dictionary)
@@ -139,6 +156,7 @@
                 {
                     Console.WriteLine($"Unknown command: '{command}'");
                 }
+                //NYI: Add help command to display available commands and show it at startup.
             }
             while (true);
         }
