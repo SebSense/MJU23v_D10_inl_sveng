@@ -168,12 +168,11 @@
                 using (StreamReader reader = new StreamReader(path + file))
                 {
                     dictionary = new List<SweEngGloss>(); // Empty it!
-                    string line = reader.ReadLine();
-                    while (line != null)
+                    string line;
+                    while ((line = reader.ReadLine()) != null)
                     {
                         SweEngGloss gloss = new SweEngGloss(line);
                         dictionary.Add(gloss);
-                        line = reader.ReadLine();
                     }
                 }
                 Console.WriteLine("\n " + file + " succesfully loaded!\n");
@@ -182,7 +181,7 @@
             {
                 Console.WriteLine("Error: " + e.Message);
             }
-            catch(IndexOutOfRangeException e)
+            catch(IndexOutOfRangeException)
             {
                 Console.WriteLine("Error: Loading aborted. File is corrupt or is not a valid .lis dictionary file.");
             }
