@@ -51,30 +51,30 @@
                     {
                         //NYI: Crashes on incorrect filename FileNotFoundException
                         //NYI: Check file formatting before emptying list and trying to load.
-                        using (StreamReader sr = new StreamReader(defaultPath + argument[1]))
+                        using (StreamReader reader = new StreamReader(defaultPath + argument[1]))
                         {
                             dictionary = new List<SweEngGloss>(); // Empty it!
-                            string line = sr.ReadLine();
+                            string line = reader.ReadLine();
                             while (line != null)
                             {
                                 SweEngGloss gloss = new SweEngGloss(line);
                                 dictionary.Add(gloss);
-                                line = sr.ReadLine();
+                                line = reader.ReadLine();
                             }
                         }
                         Console.WriteLine("\n " + argument[1] + " succesfully loaded!\n");
                     }
                     else if (argument.Length == 1)
                     {
-                        using (StreamReader sr = new StreamReader(defaultPath + defaultFile))
+                        using (StreamReader reader = new StreamReader(defaultPath + defaultFile))
                         {
                             dictionary = new List<SweEngGloss>(); // Empty it!
-                            string line = sr.ReadLine();
+                            string line = reader.ReadLine();
                             while (line != null)
                             {
                                 SweEngGloss gloss = new SweEngGloss(line);
                                 dictionary.Add(gloss);
-                                line = sr.ReadLine();
+                                line = reader.ReadLine();
                             }
                         }
                         Console.WriteLine("\n " + defaultFile + " succesfully loaded!\n");
@@ -97,10 +97,10 @@
                     else if (argument.Length == 1)
                     {
                         //TBD: Refactor two lines into one method.
-                        string s = GetString("Write word in Swedish: ");
-                        string e = GetString("Write word in English: ");
-                        dictionary.Add(new SweEngGloss(s, e));
-                        Console.WriteLine(" Added word to dictionary: '{0} - {1}'\n", s, e);
+                        string swe_meaning = GetString("Write word in Swedish: ");
+                        string eng_meaning = GetString("Write word in English: ");
+                        dictionary.Add(new SweEngGloss(swe_meaning, eng_meaning));
+                        Console.WriteLine(" Added word to dictionary: '{0} - {1}'\n", swe_meaning, eng_meaning);
                     }
                 }
                 else if (command == "delete")
@@ -126,12 +126,12 @@
                     {
                         bool found = false;
                         //TBD: Refactor two lines into one method.
-                        string s = GetString("Write word in Swedish: ");
-                        string e = GetString("Write word in English: ");
+                        string swe_meaning = GetString("Write word in Swedish: ");
+                        string eng_meaning = GetString("Write word in English: ");
                         for (int i = 0; i < dictionary.Count; i++)
                         {
                             SweEngGloss gloss = dictionary[i];
-                            if (gloss.word_swe == s && gloss.word_eng == e)
+                            if (gloss.word_swe == swe_meaning && gloss.word_eng == eng_meaning)
                             {
                                 Console.WriteLine(" '{0} - {1}' successfully removed.", gloss.word_swe, gloss.word_eng);
                                 dictionary.RemoveAt(i);
@@ -139,11 +139,12 @@
                                 break;
                             }
                         }
-                        if (!found) Console.WriteLine(" Could not find any word '{0} - {1}' to delete.", s, e);
+                        if (!found) Console.WriteLine(" Could not find any word '{0} - {1}' to delete.", swe_meaning, eng_meaning);
                     }
                 }
                 else if (command == "translate")
                 {
+                    //NYI: Add user feecback for word not found
                     //TBD: Refactor repeating code.
                     if (argument.Length == 2)
                     {
@@ -157,12 +158,12 @@
                     }
                     else if (argument.Length == 1)
                     {
-                        string s = GetString("Write word to be translated: ");
+                        string word_to_translate = GetString("Write word to be translated: ");
                         foreach (SweEngGloss gloss in dictionary)
                         {
-                            if (gloss.word_swe == s)
+                            if (gloss.word_swe == word_to_translate)
                                 Console.WriteLine($"English for {gloss.word_swe} is {gloss.word_eng}");
-                            if (gloss.word_eng == s)
+                            if (gloss.word_eng == word_to_translate)
                                 Console.WriteLine($"Swedish for {gloss.word_eng} is {gloss.word_swe}");
                         }
                     }
