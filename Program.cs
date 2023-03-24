@@ -5,8 +5,8 @@
         static List<SweEngGloss> dictionary = new();
         class SweEngGloss
         {
-            //TODO: Make private.
-            public string word_swe, word_eng;
+            public string word_swe { get; private set; }
+            public string word_eng { get; private set; }
             public SweEngGloss(string word_swe, string word_eng)
             {
                 this.word_swe = word_swe; this.word_eng = word_eng;
@@ -36,8 +36,7 @@
             do
             {
                 //TBD: Refactor following two lines to one method 'string[] str_arr = GetStringArray(string prompt)'
-                Console.Write("> ");
-                string[] argument = Console.ReadLine().Split();
+                string[] argument = GetArgs("> ");
                 string command = argument[0];
                 if (command == "quit")
                 {
@@ -48,7 +47,7 @@
                 {
                     //TBD: Refactor repeating code
                     //TBD: Add console feedback confirming loaded file or file not found.
-                    if(argument.Length == 2)
+                    if (argument.Length == 2)
                     {
                         //NYI: Crashes on incorrect filename FileNotFoundException
                         //NYI: Check file formatting before emptying list and trying to load.
@@ -65,7 +64,7 @@
                         }
                         Console.WriteLine("\n " + argument[1] + " succesfully loaded!\n");
                     }
-                    else if(argument.Length == 1)
+                    else if (argument.Length == 1)
                     {
                         using (StreamReader sr = new StreamReader(defaultPath + defaultFile))
                         {
@@ -83,7 +82,7 @@
                 }
                 else if (command == "list")
                 {
-                    foreach(SweEngGloss gloss in dictionary)
+                    foreach (SweEngGloss gloss in dictionary)
                     {
                         Console.WriteLine($"{gloss.word_swe,-10}  - {gloss.word_eng,-10}");
                     }
@@ -95,13 +94,11 @@
                         dictionary.Add(new SweEngGloss(argument[1], argument[2]));
                         Console.WriteLine(" Added word to dictionary: '{0} - {1}'\n", argument[1], argument[2]);
                     }
-                    else if(argument.Length == 1)
+                    else if (argument.Length == 1)
                     {
                         //TBD: Refactor two lines into one method.
-                        Console.WriteLine("Write word in Swedish: ");
-                        string s = Console.ReadLine();
-                        Console.Write("Write word in English: ");
-                        string e = Console.ReadLine();
+                        string s = GetString("Write word in Swedish: ");
+                        string e = GetString("Write word in English: ");
                         dictionary.Add(new SweEngGloss(s, e));
                         Console.WriteLine(" Added word to dictionary: '{0} - {1}'\n", s, e);
                     }
@@ -112,7 +109,8 @@
                     if (argument.Length == 3)
                     {
                         bool found = false;
-                        for (int i = 0; i < dictionary.Count; i++) {
+                        for (int i = 0; i < dictionary.Count; i++)
+                        {
                             SweEngGloss gloss = dictionary[i];
                             if (gloss.word_swe == argument[1] && gloss.word_eng == argument[2])
                             {
@@ -128,10 +126,8 @@
                     {
                         bool found = false;
                         //TBD: Refactor two lines into one method.
-                        Console.WriteLine("Write word in Swedish: ");
-                        string s = Console.ReadLine();
-                        Console.Write("Write word in English: ");
-                        string e = Console.ReadLine();
+                        string s = GetString("Write word in Swedish: ");
+                        string e = GetString("Write word in English: ");
                         for (int i = 0; i < dictionary.Count; i++)
                         {
                             SweEngGloss gloss = dictionary[i];
@@ -151,7 +147,7 @@
                     //TBD: Refactor repeating code.
                     if (argument.Length == 2)
                     {
-                        foreach(SweEngGloss gloss in dictionary)
+                        foreach (SweEngGloss gloss in dictionary)
                         {
                             if (gloss.word_swe == argument[1])
                                 Console.WriteLine($"English for {gloss.word_swe} is {gloss.word_eng}");
@@ -161,8 +157,7 @@
                     }
                     else if (argument.Length == 1)
                     {
-                        Console.WriteLine("Write word to be translated: ");
-                        string s = Console.ReadLine();
+                        string s = GetString("Write word to be translated: ");
                         foreach (SweEngGloss gloss in dictionary)
                         {
                             if (gloss.word_swe == s)
@@ -172,7 +167,7 @@
                         }
                     }
                 }
-                else if(command == "help")
+                else if (command == "help")
                 {
                     Console.WriteLine("\n Available commands:\n" +
                         "  new /swe/ /eng/       - Add new word to dictionary. /swe/ and /eng/ optional.\n" +
@@ -190,6 +185,17 @@
                 }
             }
             while (true);
+        }
+
+        private static string[] GetArgs(string prompt)
+        {
+            Console.Write(prompt);
+            return Console.ReadLine().Split();
+        }
+        private static string GetString(string prompt)
+        {
+            Console.Write(prompt);
+            return Console.ReadLine();
         }
     }
 }
