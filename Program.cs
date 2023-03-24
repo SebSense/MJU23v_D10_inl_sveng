@@ -111,18 +111,22 @@
                     //TBD: Refactor two repeating instances of code.
                     if (argument.Length == 3)
                     {
+                        bool found = false;
                         for (int i = 0; i < dictionary.Count; i++) {
                             SweEngGloss gloss = dictionary[i];
                             if (gloss.word_swe == argument[1] && gloss.word_eng == argument[2])
                             {
-                                Console.WriteLine(" Word '{0} - {1}' successfully removed.\n", gloss.word_swe, gloss.word_eng);
+                                Console.WriteLine(" '{0} - {1}' successfully removed.", gloss.word_swe, gloss.word_eng);
                                 dictionary.RemoveAt(i);
+                                found = true;
                                 break;
                             }
                         }
+                        if (!found) Console.WriteLine(" Could not find any word '{0} - {1}' to delete.", argument[1], argument[2]);
                     }
                     else if (argument.Length == 1)
                     {
+                        bool found = false;
                         //TBD: Refactor two lines into one method.
                         Console.WriteLine("Write word in Swedish: ");
                         string s = Console.ReadLine();
@@ -133,11 +137,13 @@
                             SweEngGloss gloss = dictionary[i];
                             if (gloss.word_swe == s && gloss.word_eng == e)
                             {
-                                Console.WriteLine(" Word '{0} - {1}' successfully removed.\n", gloss.word_swe, gloss.word_eng);
+                                Console.WriteLine(" '{0} - {1}' successfully removed.", gloss.word_swe, gloss.word_eng);
                                 dictionary.RemoveAt(i);
+                                found = true;
                                 break;
                             }
                         }
+                        if (!found) Console.WriteLine(" Could not find any word '{0} - {1}' to delete.", s, e);
                     }
                 }
                 else if (command == "translate")
