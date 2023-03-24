@@ -21,7 +21,7 @@
         {
             //FIXME: defaultPath is customized for navigating VS project directories. Change before publishing.
             string defaultPath = "..\\..\\..\\dict\\";
-            string defaultFile = defaultPath + "sweeng.lis";
+            string defaultFile = "sweeng.lis";
             Console.WriteLine("Welcome to the dictionary app!");
             //TBD: Refactor into method:
             Console.WriteLine("\n Available commands:\n" +
@@ -63,10 +63,11 @@
                                 line = sr.ReadLine();
                             }
                         }
+                        Console.WriteLine("\n " + argument[1] + " succesfully loaded!\n");
                     }
                     else if(argument.Length == 1)
                     {
-                        using (StreamReader sr = new StreamReader(defaultFile))
+                        using (StreamReader sr = new StreamReader(defaultPath + defaultFile))
                         {
                             dictionary = new List<SweEngGloss>(); // Empty it!
                             string line = sr.ReadLine();
@@ -77,6 +78,7 @@
                                 line = sr.ReadLine();
                             }
                         }
+                        Console.WriteLine("\n " + defaultFile + " succesfully loaded!\n");
                     }
                 }
                 else if (command == "list")
@@ -92,6 +94,7 @@
                     if (argument.Length == 3)
                     {
                         dictionary.Add(new SweEngGloss(argument[1], argument[2]));
+                        Console.WriteLine(" Added word to dictionary: '{0} - {1}'\n", argument[1], argument[2]);
                     }
                     else if(argument.Length == 1)
                     {
@@ -101,6 +104,7 @@
                         Console.Write("Write word in English: ");
                         string e = Console.ReadLine();
                         dictionary.Add(new SweEngGloss(s, e));
+                        Console.WriteLine(" Added word to dictionary: '{0} - {1}'\n", s, e);
                     }
                 }
                 else if (command == "delete")
