@@ -23,6 +23,16 @@
             //FIXME: Split into two variables, path and file in order to enable user input of relative path filenames.
             string defaultFile = "..\\..\\..\\dict\\sweeng.lis";
             Console.WriteLine("Welcome to the dictionary app!");
+            //TBD: Refactor into method:
+            Console.WriteLine("\n Available commands:\n" +
+                        "  new /swe/ /eng/       - Add new word to dictionary. /swe/ and /eng/ optional.\n" +
+                        "  load                  - Load dictionary from default file.\n" +
+                        "  load /filename/       - Load dictionary from /filename/." +
+                        "  list                  - Display dictionary.\n" +
+                        "  delete /swe/ /eng/    - Delete word from dictionary.\n" +
+                        "  translate /word/      - Translate /word/ from Swedish to English or from English to Swedish.\n" +
+                        "  help                  - Show this list of available commands.\n" +
+                        "  quit                  - Exit application.");
             do
             {
                 //NYI: Execute help method displaying all commands.
@@ -151,6 +161,18 @@
                                 Console.WriteLine($"Swedish for {gloss.word_eng} is {gloss.word_swe}");
                         }
                     }
+                }
+                else if(command == "help")
+                {
+                    Console.WriteLine("\n Available commands:\n" +
+                        "  new /swe/ /eng/       - Add new word to dictionary. /swe/ and /eng/ optional.\n" +
+                        "  load                  - Load dictionary from default file.\n" +
+                        "  load /filename/       - Load dictionary from /filename/." +
+                        "  list                  - Display dictionary.\n" +
+                        "  delete /swe/ /eng/    - Delete word from dictionary.\n" +
+                        "  translate /word/      - Translate /word/ from Swedish to English or from English to Swedish.\n" +
+                        "  help                  - Show this list of available commands.\n" +
+                        "  quit                  - Exit application.");
                 }
                 else
                 {
